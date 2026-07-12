@@ -65,20 +65,6 @@ Edit `feeds.js` — each source is one line:
 - Reddit: append `.rss` to a subreddit → `https://www.reddit.com/r/SUBREDDIT/.rss`
 - YouTube channel: `https://www.youtube.com/feeds/videos.xml?channel_id=CHANNEL_ID`
 
-## Advertisements
-
-The layout has built-in ad slots: a leaderboard banner under the tabs and an in-feed ad card
-every 10 stories. They show themed placeholders until you connect Google AdSense:
-
-1. Get a custom domain (~$10/yr) — AdSense generally rejects free subdomains like
-   `username.github.io`.
-2. Apply at [adsense.google.com](https://adsense.google.com) with your domain (approval can
-   take days–weeks and requires original content policies — review their program policies).
-3. Paste your publisher ID (`ca-pub-…`) into `ads.js` → `adsenseClient`. Done — real ads
-   replace the placeholders automatically.
-
-Tune placement in `ads.js` (`gridFrequency`, per-slot IDs, or `enabled: false` to hide ads).
-
 ## Host it for free
 
 It's a static site — drag the folder onto **Netlify Drop**, push to **GitHub Pages**, or deploy to

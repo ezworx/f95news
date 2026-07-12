@@ -383,74 +383,10 @@
     </a>`;
   }
 
-  // ---- Ads (config in ads.js) ------------------------------------------------
-  const adsEnabled = () => window.ADS && window.ADS.enabled !== false;
-  const hasAdsense = () => adsEnabled() && !!window.ADS.adsenseClient;
-
-  let adsenseScriptLoaded = false;
-  function loadAdsenseScript() {
-    if (adsenseScriptLoaded || !hasAdsense()) return;
-    adsenseScriptLoaded = true;
-    const s = document.createElement("script");
-    s.async = true;
-    s.crossOrigin = "anonymous";
-    s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${encodeURIComponent(window.ADS.adsenseClient)}`;
-    document.head.appendChild(s);
-  }
-
-  // kind: "banner" (leaderboard under tabs) | "grid" (in-feed card)
-  function adHtml(kind) {
-    if (!adsEnabled()) return "";
-    const wrap = kind === "grid" ? "card ad-card" : "";
-    if (hasAdsense()) {
-      const slot = (window.ADS.slots && window.ADS.slots[kind]) || "";
-      return `<div class="ad-slot ${kind} ${wrap}">
-        <span class="ad-label">Advertisement</span>
-        <ins class="adsbygoogle" style="display:block"
-             data-ad-client="${escapeHtml(window.ADS.adsenseClient)}"
-             ${slot ? `data-ad-slot="${escapeHtml(slot)}"` : ""}
-             data-ad-format="${kind === "banner" ? "horizontal" : "fluid"}"
-             data-full-width-responsive="true"></ins>
-      </div>`;
-    }
-    // No publisher ID yet — show a themed placeholder so the layout is visible.
-    return `<div class="ad-slot ${kind} ${wrap} ad-placeholder">
-      <span class="ad-label">Advertisement</span>
-      <div class="ad-ph">
-        <span class="ad-ph-icon">📢</span>
-        <span class="ad-ph-text">Ad space — add your AdSense ID in <code>ads.js</code></span>
-      </div>
-    </div>`;
-  }
-
-  // AdSense requires a push() per <ins> after it's in the DOM.
-  function activateAds(scope) {
-    if (!hasAdsense()) return;
-    loadAdsenseScript();
-    scope.querySelectorAll("ins.adsbygoogle:not([data-init])").forEach((ins) => {
-      ins.setAttribute("data-init", "1");
-      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch { /* not loaded yet */ }
-    });
-  }
-
-  function renderBanner() {
-    const banner = document.getElementById("ad-banner");
-    if (!banner) return;
-    banner.innerHTML = adHtml("banner");
-    activateAds(banner);
-  }
-
   function render() {
     const items = currentItems();
     el.empty.classList.toggle("hidden", items.length > 0);
-    const freq = (window.ADS && window.ADS.gridFrequency) || 10;
-    const parts = [];
-    items.forEach((it, i) => {
-      parts.push(cardHtml(it));
-      if (adsEnabled() && (i + 1) % freq === 0) parts.push(adHtml("grid"));
-    });
-    el.grid.innerHTML = parts.join("");
-    activateAds(el.grid);
+    el.grid.innerHTML = items.map(cardHtml).join("");
   }
 
   // ---- Events ----------------------------------------------------------------
@@ -488,7 +424,6 @@
   // ---- Boot ------------------------------------------------------------------
   function init() {
     renderTabs();
-    renderBanner();
     const cached = loadCache();
     if (cached && cached.items.length) {
       allItems = cached.items;

@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- SECURITY: no inline scripts allowed; scripts only from this site + AdSense;
-       network requests only to this site + the RSS fallback proxies; frames only
-       for AdSense creatives. If ads ever render blank after enabling AdSense,
-       this list may need updating per Google's current CSP guidance. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com https://partner.googleadservices.com https://tpc.googlesyndication.com https://www.googletagservices.com; connect-src 'self' https://api.rss2json.com https://api.allorigins.win https://api.codetabs.com https://pagead2.googlesyndication.com; img-src https: data:; style-src 'self' 'unsafe-inline'; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.google.com; base-uri 'self'; form-action 'none'; object-src 'none'" />
+  <!-- SECURITY: no inline scripts allowed; scripts only from this site; network
+       requests only to this site + the RSS fallback proxies; no framed content. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self' https://api.rss2json.com https://api.allorigins.win https://api.codetabs.com; img-src https: data:; style-src 'self' 'unsafe-inline'; base-uri 'self'; form-action 'none'; object-src 'none'; frame-src 'none'" />
   <meta name="referrer" content="no-referrer" />
   <title>Nexus — Gaming & Anime News</title>
   <meta name="description" content="Live gaming, anime, deals and trailer news in one dashboard." />
@@ -37,8 +35,6 @@
 
   <nav id="tabs" class="tabs" aria-label="Categories"><!-- tabs injected by app.js --></nav>
 
-  <div id="ad-banner" class="ad-banner"><!-- banner ad injected by app.js --></div>
-
   <div id="status" class="status-bar" aria-live="polite"></div>
 
   <main>
@@ -51,7 +47,6 @@
   </footer>
 
   <script src="feeds.js"></script>
-  <script src="ads.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

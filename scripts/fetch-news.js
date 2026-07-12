@@ -79,12 +79,13 @@ function parseFeedXml(xml, feed) {
     const thumb = extractThumb(block, descHtml);
 
     out.push({
-      title,
-      link,
+      title: title.slice(0, 300),
+      // SECURITY: only http(s) links make it into news.json — never javascript: etc.
+      link: /^https?:\/\//i.test(link) ? link : "",
       source: feed.name,
       category: feed.category,
       summary: stripTags(descHtml).slice(0, 220),
-      thumbnail: thumb && /^https?:/i.test(thumb) ? thumb : null,
+      thumbnail: thumb && /^https?:\/\//i.test(thumb) ? thumb : null,
       ts: valid ? date.getTime() : 0,
     });
   }

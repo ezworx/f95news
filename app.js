@@ -51,11 +51,18 @@
     s.replace(/[&<>"']/g, (c) =>
       ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+  // SECURITY: parse with DOMParser, never innerHTML — DOMParser documents are inert
+  // (scripts don't execute, images don't load), so hostile markup inside a feed's
+  // title/description can't run code while we're extracting its text.
   const stripHtml = (html = "") => {
-    const d = document.createElement("div");
-    d.innerHTML = html;
-    return (d.textContent || d.innerText || "").replace(/\s+/g, " ").trim();
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return (doc.body.textContent || "").replace(/\s+/g, " ").trim();
   };
+
+  // SECURITY: only http(s) URLs from feed content may reach href/src attributes —
+  // blocks javascript:, data:, vbscript: and other executable/exfil schemes.
+  const safeUrl = (u) =>
+    typeof u === "string" && /^https?:\/\//i.test(u.trim()) ? u.trim() : "";
 
   function timeAgo(date) {
     if (!date) return "";
@@ -353,17 +360,20 @@
   }
 
   function cardHtml(it) {
-    const thumb = it.thumbnail
-      ? `<img class="card-thumb" src="${escapeHtml(it.thumbnail)}" alt="" loading="lazy"
-             onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'card-thumb placeholder',textContent:'🗞️'}))" />`
+    // SECURITY: every dynamic value is either scheme-validated (URLs) or HTML-escaped
+    // before interpolation. Feed content is untrusted input.
+    const link = safeUrl(it.link);
+    const thumbUrl = safeUrl(it.thumbnail);
+    const thumb = thumbUrl
+      ? `<img class="card-thumb" src="${escapeHtml(thumbUrl)}" alt="" loading="lazy" referrerpolicy="no-referrer">`
       : `<div class="card-thumb placeholder">🗞️</div>`;
-    return `<a class="card" href="${escapeHtml(it.link)}" target="_blank" rel="noopener noreferrer">
+    return `<a class="card" href="${escapeHtml(link || "#")}" target="_blank" rel="noopener noreferrer">
       ${thumb}
       <div class="card-body">
         <div class="card-meta">
-          <span class="pill ${it.category}">${escapeHtml(CAT_LABEL[it.category] || it.category)}</span>
+          <span class="pill ${escapeHtml(it.category)}">${escapeHtml(CAT_LABEL[it.category] || it.category)}</span>
         </div>
-        <h3 class="card-title">${escapeHtml(it.title)}</h3>
+        <h3 class="card-title">${escapeHtml(String(it.title).slice(0, 300))}</h3>
         ${it.summary ? `<p class="card-summary">${escapeHtml(it.summary)}</p>` : ""}
         <div class="card-foot">
           <span class="source">${escapeHtml(it.source)}</span>
@@ -462,6 +472,18 @@
     setLoading(true);
     fetchNews();
   });
+
+  // Swap broken thumbnails for the placeholder. Delegated (capture phase — error events
+  // don't bubble) instead of inline onerror= handlers, so the CSP can ban inline script.
+  el.grid.addEventListener("error", (e) => {
+    const img = e.target;
+    if (img.tagName === "IMG" && img.classList.contains("card-thumb")) {
+      const ph = document.createElement("div");
+      ph.className = "card-thumb placeholder";
+      ph.textContent = "🗞️";
+      img.replaceWith(ph);
+    }
+  }, true);
 
   // ---- Boot ------------------------------------------------------------------
   function init() {

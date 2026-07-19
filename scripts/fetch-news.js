@@ -12,7 +12,7 @@ const PER_FEED_MAX = 25;
 const CONCURRENCY = 6;
 const TIMEOUT_MS = 15000;
 const OUTPUT_PATH = path.join(__dirname, "..", "news.json");
-const USER_AGENT = "Mozilla/5.0 (compatible; AdultNewsBot/1.0; +https://github.com/ezworx/f95news)";
+const USER_AGENT = "Mozilla/5.0 (compatible; NewsBot/1.0; +https://github.com/ezworx/f95news)";
 
 // ---- tiny regex-based RSS/Atom parser (no DOM available in Node) ----------------
 

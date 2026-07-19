@@ -1,4 +1,4 @@
-# NEXUS — Gaming & Anime News Dashboard
+# NETCITY — Anime News Dashboard
 
 A single-page, live news dashboard for gamers and anime fans. It aggregates **gaming news,
 anime & manga, deals & giveaways, and trailers/video** from free public RSS feeds — no API keys,

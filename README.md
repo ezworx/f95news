@@ -1,6 +1,6 @@
 # UNRESTRICTED — Anime News Dashboard
 
-A single-page, live news dashboard for anime fans. It aggregates **anime & manga** from free public RSS feeds 
+A single-page, live news dashboard for adult games fans. It aggregates **adult games** from free public RSS feeds 
 — no API keys, no accounts, no backend.
 
 ## Run it

@@ -15,17 +15,17 @@
 
 const FEEDS = [
   // ---------- Gaming news ----------
-  // { name: "Eurogamer",            category: "gaming", url: "https://www.eurogamer.net/feed" },
+  { name: "F95Zone",                 category: "gaming", url: "https://f95zone.to/sam/latest_alpha/latest_data.php?cmd=rss&cat=games" },
   // { name: "PC Gamer",             category: "gaming", url: "https://www.pcgamer.com/rss/" },
   // { name: "GameSpot",             category: "gaming", url: "https://www.gamespot.com/feeds/news/" },
   // { name: "Kotaku",               category: "gaming", url: "https://kotaku.com/rss" },
 
   // ---------- Anime & manga ----------
-  { name: "Anime2You",            category: "anime", url: "https://www.anime2you.de/feed/"},
-  { name: "Anime News Network",   category: "anime",  url: "https://www.animenewsnetwork.com/all/rss.xml" },
-  { name: "Siliconera",           category: "anime",  url: "https://www.siliconera.com/feed/" },
-  { name: "Anime Corner",         category: "anime",  url: "https://animecorner.me/feed/" },
-  { name: "MyAnimeList News",     category: "anime",  url: "https://myanimelist.net/rss/news.xml" },
+  // { name: "Anime2You",            category: "anime", url: "https://www.anime2you.de/feed/"},
+  // { name: "Anime News Network",   category: "anime",  url: "https://www.animenewsnetwork.com/all/rss.xml" },
+  // { name: "Siliconera",           category: "anime",  url: "https://www.siliconera.com/feed/" },
+  // { name: "Anime Corner",         category: "anime",  url: "https://animecorner.me/feed/" },
+  // { name: "MyAnimeList News",     category: "anime",  url: "https://myanimelist.net/rss/news.xml" },
 
   // ---------- Deals & giveaways ----------
   // { name: "Google News · Deals",  category: "deals",  url: "https://news.google.com/rss/search?q=%22video+game+deals%22+OR+%22game+sale%22&hl=en-US&gl=US&ceid=US:en" },
@@ -42,8 +42,8 @@ const FEEDS = [
 // Display metadata for each category (label + emoji shown on the tabs).
 const CATEGORIES = [
   { id: "all",      label: "All",              emoji: "✨" },
-  // { id: "gaming",   label: "Gaming",           emoji: "🎮" },
-  { id: "anime",    label: "Anime & Manga",    emoji: "🎌" },
+  { id: "gaming",   label: "Adult Games",      emoji: "🎮" },
+  // { id: "anime",    label: "Anime & Manga",    emoji: "🎌" },
   // { id: "deals",    label: "Deals & Giveaways",emoji: "💰" },
   // { id: "trailers", label: "Trailers & Video", emoji: "🎬" },
 ];
